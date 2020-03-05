@@ -13,12 +13,24 @@
   "author": "Aslam Ahammed <aslamplr@gmail.com>",
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
+    "grommet": "^2.11.1",
+    "polished": "^3.4.4",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "styled-components": "^5.0.1",
     "unicode-to-mltt-converter": "file:../pkg"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "copy-webpack-plugin": "^5.0.0",
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.23.0",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
-    "copy-webpack-plugin": "^5.0.0"
+    "webpack-dev-server": "^3.1.5"
   }
 }

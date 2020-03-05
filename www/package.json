@@ -1,0 +1,24 @@
+{
+  "name": "mlttconverter-web",
+  "version": "0.1.0",
+  "description": "Unicode to ML-TT converter web",
+  "main": "index.js",
+  "bin": {
+    "create-wasm-app": ".bin/create-wasm-app.js"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server"
+  },
+  "author": "Aslam Ahammed <aslamplr@gmail.com>",
+  "license": "(MIT OR Apache-2.0)",
+  "dependencies": {
+    "unicode-to-mltt-converter": "file:../pkg"
+  },
+  "devDependencies": {
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5",
+    "copy-webpack-plugin": "^5.0.0"
+  }
+}

@@ -25,7 +25,10 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   plugins: [
-    new CopyWebpackPlugin(['index.html']),
+    new CopyWebpackPlugin([
+      'index.html', 
+      {from: "public/", to: "public/", toType: "dir"}
+    ]),
     new webpack.HotModuleReplacementPlugin()
   ],
 };

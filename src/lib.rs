@@ -5,6 +5,8 @@ use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 use std::error::Error;
 
+use utils::set_panic_hook;
+
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
@@ -12,16 +14,23 @@ use std::error::Error;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
-extern {
+extern "C" {
     fn alert(s: &str);
 }
 
 #[wasm_bindgen]
 pub fn convert(text_to_convert: &str, map_content: &str) -> String {
-    let content = parse_content(&map_content).unwrap();
-    let map = create_unicode_to_mltt_map(&content).unwrap();
-    let converted_text = convert_to_mltt(&text_to_convert, &map).unwrap();
+    set_panic_hook();
+    let converted_text =
+        convert_text(text_to_convert, map_content).unwrap_or_else(|_| String::from(""));
     converted_text
+}
+
+pub fn convert_text(text_to_convert: &str, map_content: &str) -> Result<String, Box<dyn Error>> {
+    let content = parse_content(&map_content)?;
+    let map = create_unicode_to_mltt_map(&content)?;
+    let converted_text = convert_to_mltt(&text_to_convert, &map)?;
+    Ok(converted_text)
 }
 
 pub fn convert_to_mltt(
@@ -58,7 +67,7 @@ pub fn convert_to_mltt(
                 let new_val = format!("{}{}", value, right_val);
                 text_to_convert = text_to_convert.replace(&new_key, &new_val);
             }
-        }else {
+        } else {
             eprintln!("{:#?} not found in the map!", key);
         }
     }
@@ -77,11 +86,10 @@ pub fn convert_to_mltt(
         if let Some(value) = map.get(&key) {
             // println!("{} –– {} : {}", text_to_convert, key, value);
             text_to_convert = text_to_convert.replace(&key, value);
-        }else {
+        } else {
             eprintln!("{:#?} not found in the map!", key);
         }
     }
-    
     Ok(text_to_convert)
 }
 
@@ -109,5 +117,3 @@ pub fn create_unicode_to_mltt_map(
         .collect::<HashMap<_, _>>();
     Ok(map)
 }
-
-

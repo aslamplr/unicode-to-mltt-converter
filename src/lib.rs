@@ -72,19 +72,8 @@ pub fn convert_to_mltt(
         }
     }
 
-    let chillu_combinators = to_string_vec(vec!["ൺ", "ൻ", "ർ", "ൽ", "ൾ"]);
-
-    for key in chillu_combinators {
-        if let Some(value) = map.get(&key) {
-            text_to_convert = text_to_convert.replace(&key, value);
-        } else {
-            eprintln!("{:#?} not found in the map!", key);
-        }
-    }
-
     for key in keys {
         if let Some(value) = map.get(&key) {
-            // println!("{} –– {} : {}", text_to_convert, key, value);
             text_to_convert = text_to_convert.replace(&key, value);
         } else {
             eprintln!("{:#?} not found in the map!", key);

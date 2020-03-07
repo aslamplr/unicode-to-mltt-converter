@@ -8,7 +8,7 @@ import { Sync, Copy } from 'grommet-icons';
 const theme = {
     global: {
         colors: {
-            brand: '#228BE6',
+            brand: '#5970af',
         },
         font: {
             family: 'Roboto',
@@ -79,7 +79,7 @@ const App = _ => {
                         align='center'
                         justify='center'
                         pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-                        gap='medium'
+                        gap='small'
                     >
                         <Paragraph fill>
                         Malayalam Unicode to ML-TT Converter is an utility for converting Malayalam Unicode characters to 
@@ -105,8 +105,10 @@ const App = _ => {
                             value={value}
                             onChange={event => setValue(event.target.value)}
                         />
-                        <Button primary label='Convert' icon={<Sync />} onClick={convert} />
-                        <Button label='Copy' icon={<Copy />} onClick={copyToClipboard} />
+                        <Box gap="small" direction="row" height="60px">
+                            <Button primary label='Convert' icon={<Sync />} onClick={convert} />
+                            <Button label='Copy' icon={<Copy />} onClick={copyToClipboard} />
+                        </Box>
                     </Box>
                 </Box>
             </Box>

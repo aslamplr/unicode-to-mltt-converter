@@ -7,7 +7,7 @@
     "create-wasm-app": ".bin/create-wasm-app.js"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "MODE=production webpack --config webpack.config.js",
     "start": "webpack-dev-server"
   },
   "author": "Aslam Ahammed <aslamplr@gmail.com>",

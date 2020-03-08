@@ -30,6 +30,28 @@ pub fn convert_to_mltt(
         if let Some(value) = map.get(&key) {
             while let Some(index) = text_to_convert.find(&key) {
                 let right_char = text_to_convert[index - 3..].chars().next().unwrap();
+                if index >= 9 {
+                    let prev_char = text_to_convert[index - 9..].chars().next().unwrap();
+                    if right_char == prev_char {
+                        let right_char = text_to_convert[index - 9..index]
+                            .chars()
+                            .collect::<String>();
+                        let right_val = map.get(&format!("{}", right_char)).unwrap();
+                        let new_key = format!("{}{}", right_char, key);
+                        let new_val = format!("{}{}", value, right_val);
+                        text_to_convert = text_to_convert.replace(&new_key, &new_val);
+                        continue;
+                    }
+                    if "്ര" == format!("്{}", right_char) {
+                        let prev_right_char = format!("്{}", right_char);
+                        let right_char = text_to_convert[index - 9..].chars().next().unwrap();
+                        let prev_right_val = map.get(&format!("{}", prev_right_char)).unwrap();
+                        let right_val = map.get(&format!("{}", right_char)).unwrap();
+                        let new_key = format!("{}{}{}", right_char, prev_right_char, key);
+                        let new_val = format!("{}{}{}", value, prev_right_val, right_val);
+                        text_to_convert = text_to_convert.replace(&new_key, &new_val);
+                    }
+                }
                 let right_val = map.get(&format!("{}", right_char)).unwrap();
                 let new_key = format!("{}{}", right_char, key);
                 let new_val = format!("{}{}", value, right_val);

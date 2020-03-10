@@ -99,6 +99,7 @@ const App = _ => {
                             onChange={event => setInputValue(event.target.value)}
                         />
                         <TextArea
+                            style={value ? {fontFamily: "ml-ttkarthikanormal"} : {}}
                             rows="10"
                             ref={resultTextAreaEl}
                             placeholder='click Convert to see the results here!'

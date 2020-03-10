@@ -42,14 +42,12 @@ pub fn convert_to_mltt(
     let mut temp_map: HashMap<String, String> = HashMap::new();
     if text_to_convert.len() >= 9 {
         for (index, ch) in text_to_convert.char_indices() {
-            if ch == '്' {
-                if index >= 3 && index + 3 < text_to_convert.len() {
-                    let left_char = get_prev_char(&text_to_convert, index);
-                    let right_char = get_next_char(&text_to_convert, index);
-                    let key = format!("{}്{}", left_char, right_char);
-                    if let Some(value) = map.get(&key) {
-                        temp_map.insert(key, value.to_string());
-                    }
+            if index >= 3 && index + 3 < text_to_convert.len() && ch == '്' {
+                let left_char = get_prev_char(&text_to_convert, index);
+                let right_char = get_next_char(&text_to_convert, index);
+                let key = format!("{}്{}", left_char, right_char);
+                if let Some(value) = map.get(&key) {
+                    temp_map.insert(key, value.to_string());
                 }
             }
         }
@@ -77,25 +75,20 @@ pub fn convert_to_mltt(
     for key in left_combinators {
         if let Some(value) = map.get(&key) {
             while let Some(index) = text_to_convert.find(&key) {
-                let right_char = get_prev_char(&text_to_convert, index);
+                let right_char = get_prev_char(&text_to_convert, index).to_string();
                 if "്ര" == format!("്{}", right_char) {
                     let prev_right_char = format!("്{}", right_char);
                     let right_char = get_nth_char_from(&text_to_convert, index, -3);
-                    let prev_right_val = map.get(&format!("{}", prev_right_char)).unwrap();
-                    let right_val = map.get(&format!("{}", right_char)).unwrap();
+                    let prev_right_val = map.get(&prev_right_char.to_string()).unwrap();
+                    let right_val = map.get(&right_char.to_string()).unwrap();
                     let new_key = format!("{}{}{}", right_char, prev_right_char, key);
                     let new_val = format!("{}{}{}", value, prev_right_val, right_val);
                     text_to_convert = text_to_convert.replace(&new_key, &new_val);
                 }
-                if let Some(right_val) = map.get(&format!("{}", right_char)) {
-                    let new_key = format!("{}{}", right_char, key);
-                    let new_val = format!("{}{}", value, right_val);
-                    text_to_convert = text_to_convert.replace(&new_key, &new_val);
-                } else {
-                    let new_key = format!("{}{}", right_char, key);
-                    let new_val = format!("{}{}", value, right_char);
-                    text_to_convert = text_to_convert.replace(&new_key, &new_val);
-                }
+                let right_val = map.get(&right_char).unwrap_or(&right_char);
+                let new_key = format!("{}{}", right_char, key);
+                let new_val = format!("{}{}", value, right_val);
+                text_to_convert = text_to_convert.replace(&new_key, &new_val);
             }
         } else {
             eprintln!("{:#?} not found in the map!", key);

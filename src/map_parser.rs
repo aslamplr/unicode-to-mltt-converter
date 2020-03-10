@@ -3,24 +3,24 @@ use std::error::Error;
 
 pub fn parse_content(content: &str) -> Result<Vec<Vec<String>>, Box<dyn Error>> {
     let content = content
-        .split("\n")
-        .filter(|x| x.len() >= 1 && x.chars().nth(0) != Some('#') && x.contains("="))
+        .split('\n')
+        .filter(|x| !x.is_empty() && x.chars().nth(0) != Some('#') && x.contains('='))
         .map(|x| {
-            x.split("=")
+            x.split('=')
                 .map(|s| s.trim())
                 .map(String::from)
                 .collect::<Vec<_>>()
         })
-        .filter(|x| x[1].len() >= 1 && x[0].len() >= 1)
+        .filter(|x| !x[1].is_empty() && !x[0].is_empty())
         .collect::<Vec<_>>();
     Ok(content)
 }
 
 pub fn create_unicode_to_mltt_map(
-    content: &Vec<Vec<String>>,
+    content: &[Vec<String>],
 ) -> Result<HashMap<String, String>, Box<dyn Error>> {
     let map = content
-        .into_iter()
+        .iter()
         .map(|s| (s[1].to_owned(), s[0].to_owned()))
         .collect::<HashMap<_, _>>();
     Ok(map)

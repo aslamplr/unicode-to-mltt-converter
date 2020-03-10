@@ -24,9 +24,7 @@ extern "C" {
 #[wasm_bindgen]
 pub fn convert(text_to_convert: &str, map_content: &str) -> String {
     set_panic_hook();
-    let converted_text =
-        convert_text(text_to_convert, map_content).unwrap_or_else(|_| String::from(""));
-    converted_text
+    convert_text(text_to_convert, map_content).unwrap_or_else(|_| String::from(""))
 }
 
 pub fn convert_text(text_to_convert: &str, map_content: &str) -> Result<String, Box<dyn Error>> {

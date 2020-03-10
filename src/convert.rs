@@ -1,6 +1,32 @@
 use std::collections::HashMap;
 use std::error::Error;
 
+fn get_prev_char(s: &str, i: usize) -> char {
+    assert!(
+        i < s.len() && i > 0,
+        "i should not be zero index and should not exceed the len on str"
+    );
+    get_nth_char_from(&s, i, -1)
+}
+
+fn get_next_char(s: &str, i: usize) -> char {
+    assert!(i < s.len(), "i should not exceed the len on str");
+    get_nth_char_from(&s, i, 0)
+}
+
+fn get_nth_char_from(s: &str, i: usize, n: isize) -> char {
+    let char_indices = s
+        .char_indices()
+        .filter(|(idx, _)| (n >= 0 && idx > &i) || (n < 0 && idx < &i))
+        .collect::<Vec<_>>();
+    let idx: usize = if n >= 0 {
+        n as usize
+    } else {
+        (char_indices.len() as isize + n) as usize
+    };
+    char_indices[idx].1
+}
+
 pub fn convert_to_mltt(
     text_to_convert: &str,
     map: &HashMap<String, String>,
@@ -13,10 +39,30 @@ pub fn convert_to_mltt(
     let left_combinators = to_string_vec(vec!["െ", "േ", "ൈ", "്ര"]);
     let combinators = to_string_vec(vec!["ൊ", "ോ"]);
 
+    let mut temp_map: HashMap<String, String> = HashMap::new();
+    if text_to_convert.len() >= 9 {
+        for (index, ch) in text_to_convert.char_indices() {
+            if ch == '്' {
+                if index >= 3 && index + 3 < text_to_convert.len() {
+                    let left_char = get_prev_char(&text_to_convert, index);
+                    let right_char = get_next_char(&text_to_convert, index);
+                    let key = format!("{}്{}", left_char, right_char);
+                    if let Some(value) = map.get(&key) {
+                        temp_map.insert(key, value.to_string());
+                    }
+                }
+            }
+        }
+    }
+
+    for (key, value) in temp_map {
+        text_to_convert = text_to_convert.replace(&key, &value);
+    }
+
     for key in combinators {
         if let Some(value) = map.get(&key) {
             while let Some(index) = text_to_convert.find(&key) {
-                let middle_char = text_to_convert[index - 3..].chars().next().unwrap();
+                let middle_char = get_prev_char(&text_to_convert, index);
                 let mid_val = map.get(&format!("{}", middle_char)).unwrap();
                 let split_val = value.split("").collect::<Vec<_>>();
                 let new_key = format!("{}{}", middle_char, key);
@@ -31,33 +77,25 @@ pub fn convert_to_mltt(
     for key in left_combinators {
         if let Some(value) = map.get(&key) {
             while let Some(index) = text_to_convert.find(&key) {
-                let right_char = text_to_convert[index - 3..].chars().next().unwrap();
-                if index >= 9 {
-                    let prev_char = text_to_convert[index - 9..].chars().next().unwrap();
-                    if right_char == prev_char {
-                        let right_char = text_to_convert[index - 9..index]
-                            .chars()
-                            .collect::<String>();
-                        let right_val = map.get(&format!("{}", right_char)).unwrap();
-                        let new_key = format!("{}{}", right_char, key);
-                        let new_val = format!("{}{}", value, right_val);
-                        text_to_convert = text_to_convert.replace(&new_key, &new_val);
-                        continue;
-                    }
-                    if "്ര" == format!("്{}", right_char) {
-                        let prev_right_char = format!("്{}", right_char);
-                        let right_char = text_to_convert[index - 9..].chars().next().unwrap();
-                        let prev_right_val = map.get(&format!("{}", prev_right_char)).unwrap();
-                        let right_val = map.get(&format!("{}", right_char)).unwrap();
-                        let new_key = format!("{}{}{}", right_char, prev_right_char, key);
-                        let new_val = format!("{}{}{}", value, prev_right_val, right_val);
-                        text_to_convert = text_to_convert.replace(&new_key, &new_val);
-                    }
+                let right_char = get_prev_char(&text_to_convert, index);
+                if "്ര" == format!("്{}", right_char) {
+                    let prev_right_char = format!("്{}", right_char);
+                    let right_char = get_nth_char_from(&text_to_convert, index, -3);
+                    let prev_right_val = map.get(&format!("{}", prev_right_char)).unwrap();
+                    let right_val = map.get(&format!("{}", right_char)).unwrap();
+                    let new_key = format!("{}{}{}", right_char, prev_right_char, key);
+                    let new_val = format!("{}{}{}", value, prev_right_val, right_val);
+                    text_to_convert = text_to_convert.replace(&new_key, &new_val);
                 }
-                let right_val = map.get(&format!("{}", right_char)).unwrap();
-                let new_key = format!("{}{}", right_char, key);
-                let new_val = format!("{}{}", value, right_val);
-                text_to_convert = text_to_convert.replace(&new_key, &new_val);
+                if let Some(right_val) = map.get(&format!("{}", right_char)) {
+                    let new_key = format!("{}{}", right_char, key);
+                    let new_val = format!("{}{}", value, right_val);
+                    text_to_convert = text_to_convert.replace(&new_key, &new_val);
+                } else {
+                    let new_key = format!("{}{}", right_char, key);
+                    let new_val = format!("{}{}", value, right_char);
+                    text_to_convert = text_to_convert.replace(&new_key, &new_val);
+                }
             }
         } else {
             eprintln!("{:#?} not found in the map!", key);

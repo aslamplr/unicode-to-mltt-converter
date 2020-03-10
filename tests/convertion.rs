@@ -73,7 +73,6 @@ fn convert_case_short_6() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[ignore]
 fn convert_case_short_7() -> Result<(), Box<dyn Error>> {
     test_convertion(
         r#"കണ്ടെത്താനാവൂ"#, 
@@ -90,7 +89,6 @@ fn convert_case_short_8() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[ignore]
 fn convert_case_long_1() -> Result<(), Box<dyn Error>> {
     test_convertion(
         r#"കേരളത്തിൽ വിരളമായി കാണപ്പെടുന്ന ഒരിനം പൂമ്പാറ്റയാണ് മലബാർ മിന്നൻ (Rapala lankana). ഇന്ത്യയിലെ പശ്ചിമഘട്ടത്തിലെ വളരെ കുറച്ച് സ്ഥലത്തേ അതായത് കേരളം, തമിഴ്നാട്, കർണ്ണാടകം ഉൾപ്പെടുന്ന പ്രദേശങ്ങളിൽ ഇവയെ കണ്ടെത്താനാവൂ."#, 

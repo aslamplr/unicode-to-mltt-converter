@@ -62,8 +62,8 @@ pub fn convert_to_mltt(
     for key in combinators {
         if let Some(value) = map.get(&key) {
             while let Some(index) = text_to_convert.find(&key) {
-                let middle_char = get_prev_char(&text_to_convert, index);
-                let mid_val = map.get(&format!("{}", middle_char)).unwrap();
+                let middle_char = get_prev_char(&text_to_convert, index).to_string();
+                let mid_val = map.get(&middle_char).unwrap_or(&middle_char);
                 let split_val = value.split("").collect::<Vec<_>>();
                 let new_key = format!("{}{}", middle_char, key);
                 let new_val = format!("{}{}{}", split_val[1], mid_val, split_val[2]);

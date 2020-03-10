@@ -10,7 +10,7 @@ pub fn convert_to_mltt(
     keys.sort_by(|a, b| b.len().cmp(&a.len()));
     let to_string_vec = |x: Vec<&str>| x.into_iter().map(String::from).collect::<Vec<_>>();
     let _right_combinators = to_string_vec(vec!["ാ", "ി", "ീ", "ു", "ൂ", "ൃ", "ൄ", "ൌ", "്"]);
-    let left_combinators = to_string_vec(vec!["െ", "േ", "ൈ"]);
+    let left_combinators = to_string_vec(vec!["െ", "േ", "ൈ", "്ര"]);
     let combinators = to_string_vec(vec!["ൊ", "ോ"]);
 
     for key in combinators {
@@ -23,6 +23,8 @@ pub fn convert_to_mltt(
                 let new_val = format!("{}{}{}", split_val[1], mid_val, split_val[2]);
                 text_to_convert = text_to_convert.replace(&new_key, &new_val);
             }
+        } else {
+            eprintln!("{:#?} not found in the map!", key);
         }
     }
 
@@ -65,8 +67,6 @@ pub fn convert_to_mltt(
     for key in keys {
         if let Some(value) = map.get(&key) {
             text_to_convert = text_to_convert.replace(&key, value);
-        } else {
-            eprintln!("{:#?} not found in the map!", key);
         }
     }
     Ok(text_to_convert)

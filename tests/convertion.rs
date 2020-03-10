@@ -82,7 +82,6 @@ fn convert_case_short_7() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[ignore]
 fn convert_case_short_8() -> Result<(), Box<dyn Error>> {
     test_convertion(
         r#"ക്രിമിനൽ"#, 

@@ -1,6 +1,7 @@
 Backend Features:
 - [ ] Fix `convert_case_short_13`
-- [ ] Add long text for test case
+- [ ] Fix `convert_case_long_2`
+- [x] Add long text for test case
 
 Frontend Features:
 - [ ] Add Optional Google transliterate for input https://developers.google.com/transliterate/v1/getting_started

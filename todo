@@ -4,5 +4,6 @@ Backend Features:
 - [x] Add long text for test case
 
 Frontend Features:
-- [ ] Add Optional Google transliterate for input https://developers.google.com/transliterate/v1/getting_started
+- [ ] Add menu to select transliteration options for text, when enabled
+- [x] Add Optional Google transliterate for input https://developers.google.com/transliterate/v1/getting_started
 - [x] Add MLTT font viewer http://www.fontsquirrel.com/tools/webfont-generator

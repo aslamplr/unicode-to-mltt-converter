@@ -13,6 +13,7 @@
   "author": "Aslam Ahammed <aslamplr@gmail.com>",
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
+    "google-input-tool": "^1.1.0",
     "grommet": "^2.11.1",
     "polished": "^3.4.4",
     "react": "^16.13.0",

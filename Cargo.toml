@@ -3,6 +3,8 @@ name = "unicode-to-mltt-converter"
 version = "0.1.0"
 authors = ["Aslam Ahammed <aslamplr@gmail.com>"]
 edition = "2018"
+repository = "https://github.com/aslamplr/unicode-to-mltt-converter"
+license = "(MIT OR Apache-2.0)"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

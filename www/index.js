@@ -3,8 +3,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as googleTransliterate from "google-input-tool";
 
-import { Box, Button, Heading, Grommet, TextArea, Paragraph, CheckBox } from 'grommet';
-import { Sync, Copy } from 'grommet-icons';
+import { Box, Button, Heading, Grommet, TextArea, Paragraph, CheckBox, Anchor, Text } from 'grommet';
+import { Sync, Copy, Keyboard } from 'grommet-icons';
 
 const theme = {
     global: {
@@ -48,8 +48,9 @@ const App = _ => {
     const [charmapValue, setCharMapValue] = React.useState('');
     const [inputValue, setInputValue] = React.useState('');
     const [value, setValue] = React.useState('');
-    const [doTransliterate, setDoTransliterate] = React.useState(false);
+    const [doTransliterate, setDoTransliterate] = React.useState(true);
     const [showCharMap, setShowCharMap] = React.useState(false);
+    const [transliterateOptions, setTransliterateOptions] = React.useState([]);
 
     React.useEffect(() => {
         fetch("public/karthika.map").then((resp) => resp.text()).then((defaultCharmapVal) => {
@@ -69,14 +70,24 @@ const App = _ => {
                 const inputLanguage = "ml-t-i0-und"; // malayalam
                 googleTransliterate(request, lastWord, inputLanguage, 8).then((transliteration) => {
                     const [first_one] = transliteration;
+                    setTransliterateOptions(transliteration);
                     const newText = [...words.slice(0, words.length - 2), first_one, ""].join(" ");
                     setInputValue(newText);
                 }).catch((err) => {
                     console.error("[🛑 transliteration] ➡️ ", err);
                 });
+            } else {
+                transliterateOptions.length && setTransliterateOptions([]);
             }
         }
         setInputValue(text);
+    }
+
+    const changeLastTransliterationWord = (selectedTransliteration) => {
+        const words = inputValue.split(" ");
+        setTransliterateOptions([]);
+        const newText = [...words.slice(0, words.length - 2), selectedTransliteration, ""].join(" ");
+        setInputValue(newText);
     }
 
     const convert = () => {
@@ -104,7 +115,7 @@ const App = _ => {
                         pad={{ left: 'medium', right: 'small', vertical: 'small' }}
                         gap='small'
                     >
-                        <Paragraph fill="horizontal">
+                        <Paragraph fill>
                             Malayalam Unicode to ML-TT Converter is an utility for converting Malayalam Unicode characters to
                             corresponding ML-TT encoding. It uses default Karthika font character mapping.
                         </Paragraph>
@@ -127,12 +138,29 @@ const App = _ => {
                             value={charmapValue}
                             onChange={event => setCharMapValue(event.target.value)}
                         />}
-                        <TextArea
-                            rows="10"
-                            placeholder='type/paste unicode input here!'
-                            value={inputValue}
-                            onChange={event => transliterateAndSetInputValue(event.target.value)}
-                        />
+                        <Box fill="horizontal" gap="small">
+                            {doTransliterate && <Box direction="row">
+                                <Box margin="xsmall"><Keyboard color="brand"/></Box>
+                                {transliterateOptions.map((option, i) =>
+                                    <Box key={option + i} margin="xsmall">
+                                        <Anchor onClick={() => {
+                                            changeLastTransliterationWord(option);
+                                        }}>
+                                            {option}
+                                        </Anchor>
+                                    </Box>
+                                )}
+                                {!transliterateOptions.length && <Box margin="xsmall">
+                                    <Text color="dark-5">Transliteration options appears here as you type!</Text>
+                                </Box>}
+                            </Box>}
+                            <TextArea
+                                rows="10"
+                                placeholder='type/paste unicode input here!'
+                                value={inputValue}
+                                onChange={event => transliterateAndSetInputValue(event.target.value)}
+                            />
+                        </Box>
                         <TextArea
                             style={value ? { fontFamily: "ml-ttkarthikanormal" } : {}}
                             rows="10"

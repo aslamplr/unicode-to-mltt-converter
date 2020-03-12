@@ -69,7 +69,7 @@ const App = _ => {
                 const inputLanguage = "ml-t-i0-und"; // malayalam
                 googleTransliterate(request, lastWord, inputLanguage, 8).then((transliteration) => {
                     const [first_one] = transliteration;
-                    const newText = [...words.slice(0, words.length - 2), first_one, " "].join(" ");
+                    const newText = [...words.slice(0, words.length - 2), first_one, ""].join(" ");
                     setInputValue(newText);
                 }).catch((err) => {
                     console.error("[🛑 transliteration] ➡️ ", err);

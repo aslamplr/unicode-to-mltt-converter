@@ -121,11 +121,26 @@ fn convert_case_short_12() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[ignore]
 fn convert_case_short_13() -> Result<(), Box<dyn Error>> {
     test_convertion(
         r#"മക്രോണി"#, 
         r#"at{ImWn"#
+    )
+}
+
+#[test]
+fn convert_case_short_14() -> Result<(), Box<dyn Error>> {
+    test_convertion(
+        r#"ക്രോ"#, 
+        r#"t{Im"#
+    )
+}
+
+#[test]
+fn convert_case_short_15() -> Result<(), Box<dyn Error>> {
+    test_convertion(
+        r#"മനുഷ്യന്"#, 
+        r#"a\pjy\v"#
     )
 }
 

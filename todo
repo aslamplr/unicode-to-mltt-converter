@@ -1,6 +1,6 @@
 Backend Features:
-- [ ] Fix `convert_case_short_13`
 - [ ] Fix `convert_case_long_2`
+- [x] Fix `convert_case_short_13`
 - [x] Add long text for test case
 
 Frontend Features:

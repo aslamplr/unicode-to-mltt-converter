@@ -4,7 +4,7 @@ use std::error::Error;
 pub fn parse_content(content: &str) -> Result<Vec<Vec<String>>, Box<dyn Error>> {
     let content = content
         .split('\n')
-        .filter(|x| !x.is_empty() && x.chars().nth(0) != Some('#') && x.contains('='))
+        .filter(|x| !x.is_empty() && !x.starts_with('#') && x.contains('='))
         .map(|x| {
             x.split('=')
                 .map(|s| s.trim())
